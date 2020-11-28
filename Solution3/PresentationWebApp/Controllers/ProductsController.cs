@@ -30,6 +30,29 @@ namespace PresentationWebApp.Controllers
             return View(product);
         }
         [HttpGet]
+        public IActionResult Delete()
+        {
+            RefreshInfo();
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Delete(ProductViewModel data)
+        {
+            try
+            {
+                _productsService.DeleteProduct(data);
+                ViewData["feedback"] = "Product was deleted successfully";
+            }
+            catch (Exception e)
+            {
+                ViewData["warning"] = "Product was not deleted !" + e.Message;
+
+            }
+            RefreshInfo();
+            return View(data);
+        }
+
+        [HttpGet]
         public IActionResult Create()
         {
             RefreshInfo();
@@ -45,7 +68,7 @@ namespace PresentationWebApp.Controllers
             }
             catch (Exception e)
             {
-                ViewData["warning"] = "Product was not added !";
+                ViewData["warning"] = "Product was not added !"+e.Message;
 
             }
             RefreshInfo();

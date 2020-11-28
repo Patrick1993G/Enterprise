@@ -78,5 +78,19 @@ namespace ShoppingCart.Application.Services
                        };
             return list;
         }
+
+        public Guid DeleteProduct(ProductViewModel myProduct)
+        {
+            Product product = new Product()
+            {
+                Description = myProduct.Description,
+                CategoryId = myProduct.Category.Id,
+                ImageUrl = myProduct.ImageUrl,
+                Name = myProduct.Name,
+                Price = myProduct.Price
+            };
+            _productsRepo.DeleteProduct(product);
+            return myProduct.Id;
+        }
     }
 }
