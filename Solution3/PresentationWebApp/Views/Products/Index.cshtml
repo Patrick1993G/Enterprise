@@ -1,24 +1,32 @@
 ﻿@model IEnumerable<ShoppingCart.Application.ViewModels.ProductViewModel>
+
+
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Products Catalogue</h1>
+
+
 <div class="container">
     <div class="row">
+
         @foreach (var p in Model)
         {
             <div class="col-4">
                 <div class="card" style="width: 18rem;">
-                    <img src="@p.ImageUrl" class="card-img-top" alt="...">
+                    <img src="@p.ImageUrl" class="card-img-top image" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">@p.Name</h5>
                         <p class="card-text">@p.Price</p>
-                        <a href="details" class="btn btn-primary">View Specification</a>
+                        <a href="/Products/Details?id=@p.Id" class="btn btn-primary">View Specifications</a>
+                        <a href="/Products/Delete?id=@p.Id" class="btn btn-danger">Delete</a>
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
+
+
 

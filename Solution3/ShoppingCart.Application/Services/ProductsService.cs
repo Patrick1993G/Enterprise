@@ -87,7 +87,8 @@ namespace ShoppingCart.Application.Services
                 CategoryId = myProduct.Category.Id,
                 ImageUrl = myProduct.ImageUrl,
                 Name = myProduct.Name,
-                Price = myProduct.Price
+                Price = myProduct.Price,
+                Id = myProduct.Id
             };
             _productsRepo.DeleteProduct(product);
             return myProduct.Id;

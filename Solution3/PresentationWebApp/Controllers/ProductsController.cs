@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Application.Interfaces;
 using ShoppingCart.Application.ViewModels;
+using ShoppingCart.Domain.Models;
 
 namespace PresentationWebApp.Controllers
 {
@@ -30,17 +31,18 @@ namespace PresentationWebApp.Controllers
             return View(product);
         }
         [HttpGet]
-        public IActionResult Delete()
+        public IActionResult Delete(Guid?id)
         {
-            RefreshInfo();
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Delete(ProductViewModel data)
-        {
+            ProductViewModel product = null;
             try
             {
-                _productsService.DeleteProduct(data);
+                Guid Id = (Guid)id;
+                if (id == null)
+                {
+                    ViewData["warning"] = "Incorrect Product ID !";
+                }
+                product = _productsService.GetProduct(Id);
+                _productsService.DeleteProduct(product);
                 ViewData["feedback"] = "Product was deleted successfully";
             }
             catch (Exception e)
@@ -48,8 +50,7 @@ namespace PresentationWebApp.Controllers
                 ViewData["warning"] = "Product was not deleted !" + e.Message;
 
             }
-            RefreshInfo();
-            return View(data);
+            return View(product);
         }
 
         [HttpGet]
@@ -80,7 +81,9 @@ namespace PresentationWebApp.Controllers
         {
             //fetch a list of categories
             var listOfCategories = _categoriesService.GetCategories();
+            var listOFProducts = _productsService.GetProducts();
             //pass to the view
+            ViewBag.Products = listOFProducts;
             ViewBag.Categories = listOfCategories;
         }
     }

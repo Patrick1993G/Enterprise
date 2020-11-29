@@ -26,8 +26,4 @@
     <ProjectReference Include="..\ShoppingCart.IOC\ShoppingCart.IOC.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Product\" />
-  </ItemGroup>
-
 </Project>
