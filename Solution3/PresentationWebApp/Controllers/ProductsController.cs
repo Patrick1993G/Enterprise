@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Application.Interfaces;
 using ShoppingCart.Application.ViewModels;
@@ -14,10 +16,12 @@ namespace PresentationWebApp.Controllers
      
         private readonly IProductsService _productsService;
         private readonly ICategoriesService _categoriesService;
-        public ProductsController(IProductsService productsService,ICategoriesService categoryService)
+        private IWebHostEnvironment _environment;
+        public ProductsController(IProductsService productsService,ICategoriesService categoryService, IWebHostEnvironment environment)
         {
             _productsService = productsService;
             _categoriesService = categoryService;
+            _environment = environment;
         }
         public IActionResult Index()
         {
@@ -80,10 +84,26 @@ namespace PresentationWebApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(ProductViewModel data)
+        public IActionResult Create(ProductViewModel data, IFormFile file)
         {
             try
             {
+                if (file != null)
+                {
+                    if (file.Length >0)
+                    {
+                        string newFilename = Guid.NewGuid() + System.IO.Path.GetExtension(file.FileName);
+                        string newFilenameWithAbsolutePath = _environment.WebRootPath + @"\Images\" + newFilename;
+                        using (var stream = System.IO.File.Create(newFilenameWithAbsolutePath))
+                        {
+                            file.CopyTo(stream);
+                        }
+
+                        data.ImageUrl = @"\Images\" + newFilename;
+
+                    }
+
+                }
                 _productsService.AddProduct(data);
                 TempData["feedback"] = "Product was added successfully";
             }
