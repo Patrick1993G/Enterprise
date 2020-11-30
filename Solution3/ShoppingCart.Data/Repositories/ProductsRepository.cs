@@ -28,7 +28,12 @@ namespace ShoppingCart.Data.Repositories
             _context.Products.Remove(p);
             _context.SaveChanges();
         }
-
+        public void DisableProduct(Guid id)
+        {
+            var p = GetProduct(id);
+            p.Disable = true;
+            _context.SaveChanges();
+        }
         public Product GetProduct(Guid id)
         {
             return _context.Products.SingleOrDefault(x => x.Id.Equals(id));

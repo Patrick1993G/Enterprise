@@ -30,29 +30,49 @@ namespace PresentationWebApp.Controllers
             var product = _productsService.GetProduct(id);
             return View(product);
         }
-        [HttpGet]
-        public IActionResult Delete(Guid?id)
+        public IActionResult Delete(Guid id)
         {
-            ProductViewModel product = null;
             try
             {
-                Guid Id = (Guid)id;
                 if (id == null)
                 {
-                    ViewData["warning"] = "Incorrect Product ID !";
+                    TempData["warning"] = "Incorrect Product ID !";
                 }
-                product = _productsService.GetProduct(Id);
-                _productsService.DeleteProduct(product);
-                ViewData["feedback"] = "Product was deleted successfully";
+                else
+                {
+                    _productsService.DeleteProduct(id);
+                    TempData["feedback"] = "Product was deleted successfully";
+                }
+                
             }
             catch (Exception e)
             {
-                ViewData["warning"] = "Product was not deleted !" + e.Message;
+                TempData["warning"] = "Product was not deleted !" + e.Message;
 
             }
-            return View(product);
+            return RedirectToAction("Index");
         }
+        public IActionResult Disable(Guid id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    TempData["warning"] = "Incorrect Product ID !";
+                }
+                {
+                    _productsService.DisableProduct(id);
+                    TempData["feedback"] = "Product was disabled successfully";
+                }
+               
+            }
+            catch (Exception e)
+            {
+                TempData["warning"] = "Product was not disabled !" + e.Message;
 
+            }
+            return RedirectToAction("Index");
+        }
         [HttpGet]
         public IActionResult Create()
         {
@@ -65,11 +85,11 @@ namespace PresentationWebApp.Controllers
             try
             {
                 _productsService.AddProduct(data);
-                ViewData["feedback"] = "Product was added successfully";
+                TempData["feedback"] = "Product was added successfully";
             }
             catch (Exception e)
             {
-                ViewData["warning"] = "Product was not added !"+e.Message;
+                TempData["warning"] = "Product was not added !"+e.Message;
 
             }
             RefreshInfo();
