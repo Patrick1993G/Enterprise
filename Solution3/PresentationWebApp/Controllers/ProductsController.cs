@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,7 @@ namespace PresentationWebApp.Controllers
             var product = _productsService.GetProduct(id);
             return View(product);
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(Guid id)
         {
             try
@@ -78,12 +80,14 @@ namespace PresentationWebApp.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
+        [Authorize (Roles ="Admin")]
         public IActionResult Create()
         {
             RefreshInfo();
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(ProductViewModel data, IFormFile file)
         {
             try

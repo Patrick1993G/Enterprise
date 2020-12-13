@@ -1,4 +1,5 @@
-﻿using ShoppingCart.Application.Interfaces;
+﻿using AutoMapper;
+using ShoppingCart.Application.Interfaces;
 using ShoppingCart.Application.ViewModels;
 using ShoppingCart.Domain.Interfaces;
 using ShoppingCart.Domain.Models;
@@ -12,71 +13,40 @@ namespace ShoppingCart.Application.Services
 
     public class ProductsService : IProductsService
     {
+        private IMapper _mapper;
         private IProductsRepository _productsRepo;
-        public ProductsService(IProductsRepository productsRepository)
+        public ProductsService(IProductsRepository productsRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _productsRepo = productsRepository;
         }
 
         public void AddProduct(ProductViewModel myProduct)
         {
-            Product product = new Product()
-            {
-                Description = myProduct.Description,
-                CategoryId = myProduct.Category.Id,
-                ImageUrl = myProduct.ImageUrl,
-                Name = myProduct.Name,
-                Price = myProduct.Price
-            };
+           
+            Product product = _mapper.Map<ProductViewModel,Product>(myProduct);
             _productsRepo.AddProduct(product);
         }
 
         public ProductViewModel GetProduct(Guid id)
         {
             var myProduct = _productsRepo.GetProduct(id);
-            ProductViewModel myModel = new ProductViewModel();
-            myModel.Category = new CategoryViewModel()
-            {
-                Id = myProduct.Category.Id,
-                Name = myProduct.Category.Name
-            };
-            myModel.Description = myProduct.Description;
-            myModel.Id = myProduct.Id;
-            myModel.ImageUrl = myProduct.ImageUrl;
-            myModel.Name = myProduct.Name;
-            myModel.Price = myProduct.Price;
+            ProductViewModel myModel = _mapper.Map< Product,ProductViewModel>(myProduct);
             return myModel;
         }
 
         public IQueryable<ProductViewModel> GetProducts()
         {
-
-            var list = from p in _productsRepo.GetProducts()
-                       select new ProductViewModel()
-                       {
-                           Id = p.Id,
-                           Description = p.Description,
-                           Name = p.Name,
-                           Price = p.Price,
-                           Category = new CategoryViewModel() { Id = p.Category.Id, Name = p.Category.Name},
-                           ImageUrl = p.ImageUrl
-                        };
-            return list;
+            var products = _productsRepo.GetProducts();
+            var result = _mapper.Map<IQueryable<Product>, IQueryable<ProductViewModel>>(products);
+            return result;
         }
 
         public IQueryable<ProductViewModel> GetProducts(int category)
         {
-            var list = from p in _productsRepo.GetProducts().Where(x => x.Category.Id == category)
-                       select new ProductViewModel()
-                       {
-                           Id = p.Id,
-                           Description = p.Description,
-                           Name = p.Name,
-                           Price = p.Price,
-                           Category = new CategoryViewModel() { Id = p.Category.Id, Name = p.Category.Name },
-                           ImageUrl = p.ImageUrl
-                       };
-            return list;
+            var list = _productsRepo.GetProducts().Where(x => x.Category.Id == category);
+            var result = _mapper.Map<IQueryable<Product>, IQueryable<ProductViewModel>>(list);
+            return result;
         }
 
         public Guid DeleteProduct(Guid id)

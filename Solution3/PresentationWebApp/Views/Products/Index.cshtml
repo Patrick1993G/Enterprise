@@ -20,8 +20,12 @@
                         <h5 class="card-title">@p.Name</h5>
                         <p class="card-text">@p.Price</p>
                         <a href="/Products/Details?id=@p.Id" class="btn btn-primary">View Specifications</a>
-                        <a href="/Products/Delete?id=@p.Id" class="btn btn-danger">Delete</a>
-                        <a href="/Products/Disable?id=@p.Id" class="btn btn-secondary">Disable</a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a href="/Products/Delete?id=@p.Id" class="btn btn-danger">Delete</a>
+                            <a href="/Products/Disable?id=@p.Id" class="btn btn-secondary">Disable</a>
+                        }
+
                     </div>
                 </div>
             </div>
