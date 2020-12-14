@@ -29,7 +29,11 @@ namespace PresentationWebApp.Controllers
             var list = _productsService.GetProducts();
             return View(list);
         }
-
+        public IActionResult Search(int category)
+        {
+            var list = _productsService.GetProducts(category);
+            return RedirectToAction("Index", list);
+        }
         public IActionResult Details(Guid id)
         {
             var product = _productsService.GetProduct(id);
@@ -58,6 +62,7 @@ namespace PresentationWebApp.Controllers
             }
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Disable(Guid id)
         {
             try
