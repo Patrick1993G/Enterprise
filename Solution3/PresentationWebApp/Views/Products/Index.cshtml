@@ -7,14 +7,17 @@
 <h1>Products Catalogue</h1>
 <div class="container">
     <div class="row">
-        @Html.Partial("SearchPartial");
+        @Html.Partial("SearchPartial")
     </div>
 </div>
 
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New Product</a>
+</p>
 
 <div class="container">
     <div class="row">
-        @Html.Partial("ViewProductsPartial", Model);
+        @Html.Partial("ViewProductsPartial", Model)
     </div>
 </div>
 

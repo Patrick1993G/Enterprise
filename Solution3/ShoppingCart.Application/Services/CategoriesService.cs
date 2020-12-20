@@ -26,6 +26,24 @@ namespace ShoppingCart.Application.Services
             _categoriesRepo.AddCategory(_mapper.Map<Category>(category));
         }
 
+        public int DeleteCategory(int id)
+        {
+            var cToDelete = _categoriesRepo.GetCategory(id);
+            if (cToDelete != null)
+            {
+                _categoriesRepo.DeleteCategory(cToDelete);
+            }
+            return cToDelete.Id;
+        }
+        public int DisableCategory(int id)
+        {
+
+            if (id > 0)
+            {
+                _categoriesRepo.DisableCategory(id);
+            }
+            return id;
+        }
         public IQueryable<CategoryViewModel> GetCategories()
         {
             var categories = _categoriesRepo.GetCategories().ProjectTo<CategoryViewModel>(_mapper.ConfigurationProvider);
@@ -38,5 +56,6 @@ namespace ShoppingCart.Application.Services
             var myModel = _mapper.Map<CategoryViewModel>(myCategory);
             return myModel;
         }
+
     }
 }

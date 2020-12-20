@@ -11,5 +11,7 @@ namespace ShoppingCart.Application.Interfaces
         IQueryable<CategoryViewModel> GetCategories();
         CategoryViewModel GetCategory(int id);
         void AddCategory(CategoryViewModel category);
+        int DeleteCategory(int id);
+        int DisableCategory(int id);
     }
 }

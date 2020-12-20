@@ -30,6 +30,13 @@ namespace ShoppingCart.Data.Repositories
             _context.SaveChanges();
         }
 
+        public void DisableCategory(int id)
+        {
+            var c = GetCategory(id);
+            c.Disable = true;
+            _context.SaveChanges();
+        }
+
         public IQueryable<Category> GetCategories()
         {
             return _context.Categories;

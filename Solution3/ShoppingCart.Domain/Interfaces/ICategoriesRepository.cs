@@ -13,5 +13,6 @@ namespace ShoppingCart.Domain.Interfaces
         Category GetCategory(int id);
         void DeleteCategory(Category c);
         int AddCategory(Category c);
+        void DisableCategory(int id);
     }
 }

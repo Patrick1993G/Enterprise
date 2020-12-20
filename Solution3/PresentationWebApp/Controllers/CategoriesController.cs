@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Application.Interfaces;
 using ShoppingCart.Application.ViewModels;
 using System;
@@ -33,14 +34,59 @@ namespace PresentationWebApp.Controllers
             try
             {
                 _categoriesService.AddCategory(data);
-                ViewData["feedback"] = "Category was added successfully";
+                TempData["feedback"] = "Category was added successfully";
             }
             catch (Exception e)
             {
-                ViewData["warning"] = "Category was not added !" + e.Message;
+                TempData["warning"] = "Category was not added !" + e.Message;
 
             }
             return View(data);
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    TempData["warning"] = "Incorrect Category ID !";
+                }
+                else
+                {
+                    _categoriesService.DeleteCategory(id);
+                    TempData["feedback"] = "Category was deleted successfully";
+                }
+
+            }
+            catch (Exception e)
+            {
+                TempData["warning"] = "Category was not deleted !" + e.Message;
+
+            }
+            return RedirectToAction("Index");
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult Disable(int id)
+        {
+            try
+            {
+                if (id <=0)
+                {
+                    TempData["warning"] = "Incorrect Category ID !";
+                }
+                {
+                    _categoriesService.DisableCategory(id);
+                    TempData["feedback"] = "Category was disabled successfully";
+                }
+
+            }
+            catch (Exception e)
+            {
+                TempData["warning"] = "Category was not disabled !" + e.Message;
+
+            }
+            return RedirectToAction("Index");
         }
     }
 }
