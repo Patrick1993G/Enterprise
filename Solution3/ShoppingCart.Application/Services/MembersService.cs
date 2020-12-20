@@ -21,7 +21,7 @@ namespace ShoppingCart.Application.Services
 
         public void AddMember(MemberViewModel m)
         {
-            Member member = _mapper.Map<MemberViewModel, Member>(m);
+            Member member = _mapper.Map<Member>(m);
             _membersRepo.AddMember(member);
         }
     }

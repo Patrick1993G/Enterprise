@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ShoppingCart.Application.Interfaces;
 using ShoppingCart.Application.ViewModels;
 using ShoppingCart.Domain.Interfaces;
@@ -22,24 +23,19 @@ namespace ShoppingCart.Application.Services
 
         public void AddCategory(CategoryViewModel category)
         {
-            Category c = new Category()
-            {
-                Name = category.Name
-            };
-            _categoriesRepo.AddCategory(c);
+            _categoriesRepo.AddCategory(_mapper.Map<Category>(category));
         }
 
         public IQueryable<CategoryViewModel> GetCategories()
         {
-            var categories = _categoriesRepo.GetCategories();
-            var list = _mapper.Map<IQueryable<Category>, IQueryable<CategoryViewModel>>(categories);
-            return list;
+            var categories = _categoriesRepo.GetCategories().ProjectTo<CategoryViewModel>(_mapper.ConfigurationProvider);
+            return categories;
         }
 
         public CategoryViewModel GetCategory(int id)
         {
             var myCategory = _categoriesRepo.GetCategory(id);
-            CategoryViewModel myModel = _mapper.Map<Category,CategoryViewModel>(myCategory);
+            var myModel = _mapper.Map<CategoryViewModel>(myCategory);
             return myModel;
         }
     }

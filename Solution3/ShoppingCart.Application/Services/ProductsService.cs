@@ -24,14 +24,16 @@ namespace ShoppingCart.Application.Services
 
         public void AddProduct(ProductViewModel myProduct)
         {
-            _productsRepo.AddProduct(_mapper.Map<Product>(myProduct));
-            myProduct.Category = null;
+            var product = _mapper.Map<Product>(myProduct);
+            product.Category = null;
+            _productsRepo.AddProduct(product);
+            
         }
 
         public ProductViewModel GetProduct(Guid id)
         {
             var myProduct = _productsRepo.GetProduct(id);
-            ProductViewModel myModel = _mapper.Map< Product,ProductViewModel>(myProduct);
+            var myModel = _mapper.Map<ProductViewModel>(myProduct);
             return myModel;
         }
 
@@ -43,11 +45,16 @@ namespace ShoppingCart.Application.Services
 
         public IQueryable<ProductViewModel> GetProducts(int category)
         {
-            var list = _productsRepo.GetProducts().Where(x => x.Category.Id == category);
-            var result = _mapper.Map<IQueryable<Product>, IQueryable<ProductViewModel>>(list);
+            var list = _productsRepo.GetProducts().Where(x => x.Category.Id == category)
+                .ProjectTo<ProductViewModel>(_mapper.ConfigurationProvider);
+            return list;
+        }
+        public IQueryable<ProductViewModel> GetProducts(string keyword)
+        {
+            var result = _productsRepo.GetProducts().Where(x => x.Description.Contains(keyword) || x.Name.Contains(keyword))
+                .ProjectTo<ProductViewModel>(_mapper.ConfigurationProvider);
             return result;
         }
-
         public Guid DeleteProduct(Guid id)
         {
             var pToDelete = _productsRepo.GetProduct(id);

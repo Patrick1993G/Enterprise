@@ -15,8 +15,10 @@ namespace ShoppingCart.Application.ViewModels
         public double Price { get; set; }
         [Required(ErrorMessage = "The description is required !")]
         public string Description { get; set; }
+        [Required(ErrorMessage = "The category is required !")]
         public CategoryViewModel Category { get; set; }
         public string ImageUrl { get; set; }
-       
+        [Required(ErrorMessage = "The stock size is required !")]
+        public int Stock { get; set; }
     }
 }

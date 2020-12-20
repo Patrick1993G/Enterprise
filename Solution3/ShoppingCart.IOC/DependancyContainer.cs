@@ -29,6 +29,12 @@ namespace ShoppingCart.IOC
             services.AddScoped<IMembersRepository, MembersRepository>();
             services.AddScoped<IMembersService, MembersService>();
 
+            //services.AddScoped<IOrdersRepository, OrdersRepository>();
+            //services.AddScoped<IOrdersService, OrdersService>();
+
+            //services.AddScoped<IOrdersDetailsRepository, OrdersDetailsRepository>();
+            //services.AddScoped<IOrdersDetailsService, OrdersDetailsService>();
+            
             services.AddAutoMapper(typeof(AutoMapperConfiguration));
             AutoMapperConfiguration.RegisterMappings();
 
