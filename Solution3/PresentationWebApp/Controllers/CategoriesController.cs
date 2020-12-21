@@ -69,6 +69,7 @@ namespace PresentationWebApp.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Disable(int id)
         {
+            var category = _categoriesService.GetCategory(id);
             try
             {
                 if (id <=0)
@@ -77,13 +78,31 @@ namespace PresentationWebApp.Controllers
                 }
                 {
                     _categoriesService.DisableCategory(id);
-                    TempData["feedback"] = "Category was disabled successfully";
+                    if (!category.Disable)
+                    {
+                        TempData["feedback"] = "Category was disabled successfully";
+                    }
+                    else
+                    {
+                        TempData["feedback"] = "Category was enabled successfully";
+                    }
+                    
                 }
 
             }
             catch (Exception e)
             {
                 TempData["warning"] = "Category was not disabled !" + e.Message;
+                if (!category.Disable)
+                {
+                    TempData["warning"] = "Category was not disabled !" + e.Message;
+
+                }
+                else
+                {
+                    TempData["warning"] = "Category was not enabled !" + e.Message;
+
+                }
 
             }
             return RedirectToAction("Index");

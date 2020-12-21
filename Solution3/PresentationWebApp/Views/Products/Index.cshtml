@@ -12,19 +12,20 @@
         @Html.Partial("ViewFilterByCategoriesPartial")
     </div>
 </div>
-
-<p>
-    <a class="btn btn-primary" asp-action="Create">Create New Product</a>
-</p>
-
-<div class="container">
-    <div class="row">
-        @Html.Partial("ViewProductsPartial", Model)
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a class="btn btn-primary" asp-action="Create">Create New Product</a>
+    </p>
+}
+    <div class="container">
+        <div class="row">
+            @Html.Partial("ViewProductsPartial", Model)
+        </div>
     </div>
-</div>
 
-<div>
+    <div>
 
-    @Html.Partial("ViewPaginatorPartial", Model)
-</div>
+        @Html.Partial("ViewPaginatorPartial", Model)
+    </div>
 

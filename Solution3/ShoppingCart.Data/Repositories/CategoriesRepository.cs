@@ -33,7 +33,7 @@ namespace ShoppingCart.Data.Repositories
         public void DisableCategory(int id)
         {
             var c = GetCategory(id);
-            c.Disable = true;
+            c.Disable = !c.Disable;
             _context.SaveChanges();
         }
 

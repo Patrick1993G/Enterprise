@@ -98,7 +98,7 @@ namespace PresentationWebApp.Controllers
                     }
                     else
                     {
-                        TempData["feedback"] = "Product was anabled successfully";
+                        TempData["feedback"] = "Product was enabled successfully";
                     }
                     
                 }
@@ -113,7 +113,7 @@ namespace PresentationWebApp.Controllers
                 }
                 else
                 {
-                    TempData["warning"] = "Product was not anabled !" + e.Message;
+                    TempData["warning"] = "Product was not enabled !" + e.Message;
 
                 }
 

@@ -10,5 +10,6 @@ namespace ShoppingCart.Application.ViewModels
         public int Id { get; set; }
         [Required(ErrorMessage = "Please input a name")]
         public string Name { get; set; }
+        public bool Disable { get; set; }
     }
 }
