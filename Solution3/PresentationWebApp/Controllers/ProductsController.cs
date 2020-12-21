@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Application.Interfaces;
 using ShoppingCart.Application.ViewModels;
 using ShoppingCart.Domain.Models;
-
 namespace PresentationWebApp.Controllers
 {
     public class ProductsController : Controller
@@ -28,8 +27,9 @@ namespace PresentationWebApp.Controllers
         {
             return list.Skip(page * pageSize).Take(pageSize).ToList();
         }
-        public IActionResult Index()
+        public IActionResult Index(int page =1, int pageSize = 4)
         {
+            RefreshInfo();
             var list = _productsService.GetProducts();
             int listCount = list.Count();
             IList<ProductViewModel> firstPage = GetPage(list, 0, 10);
@@ -40,11 +40,12 @@ namespace PresentationWebApp.Controllers
             IList<ProductViewModel> nextPage = GetPage(list,currentPage*10,10);
             return View(nextPage);
         }
-        public IActionResult Filter(int category)
+        public IActionResult Filter(int id)
         {
             RefreshInfo();
-            var list = _productsService.GetProducts(category);
-            return RedirectToAction("Index", list);
+            var list = _productsService.GetProducts(id);
+            // return RedirectToAction("Index", list);
+            return View("Index", list);
         }
         [HttpPost]
         public IActionResult Search(string keyword)
