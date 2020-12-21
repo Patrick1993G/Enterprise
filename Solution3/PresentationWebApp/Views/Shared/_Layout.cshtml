@@ -52,8 +52,19 @@
     <div class="container">
         <main role="main" class="pb-3">
             @Html.Partial("ViewFeedbackPartial")
-
             @RenderBody()
+            @if (ViewData["Title"] == "Home Page" || ViewData["Title"] == "Privacy Policy")
+            {
+                <div class="row">
+                    <div class="col-6">
+                        <img class="img-fluid" alt="Responsive image" src="~/Images/appImages/pexels-george-morina-4910951.jpg" />
+                    </div>
+                    <div class="col-6">
+                        <img class="img-fluid" alt="Responsive image" src="~/Images/appImages/pexels-serpstat-572056.jpg" />
+                    </div>
+                </div>
+            }
+
         </main>
     </div>
 

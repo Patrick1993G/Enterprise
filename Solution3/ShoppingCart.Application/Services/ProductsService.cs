@@ -29,7 +29,6 @@ namespace ShoppingCart.Application.Services
             _productsRepo.AddProduct(product);
             
         }
-
         public ProductViewModel GetProduct(Guid id)
         {
             var myProduct = _productsRepo.GetProduct(id);

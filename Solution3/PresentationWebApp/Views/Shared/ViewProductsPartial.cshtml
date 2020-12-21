@@ -6,21 +6,22 @@
     {
         <div class="col-4">
             <div class="card" style="width: 18rem;">
-                <img src="@p.ImageUrl" class="card-img-top image" alt="...">
-                <div class="card-body">
+                <img src="@p.ImageUrl" class="card-img-top image img-fluid" alt="...">
+                <div class="card-body ">
                     <h5 class="card-title">@p.Name</h5>
                     <p class="card-text">€ @p.Price</p>
-                    <a href="/Products/Details?id=@p.Id" class="btn btn-primary">View Specifications</a>
+                    <a href="/Products/Details?id=@p.Id" class="list-group-item text-success">View Specifications</a>
+                    <a href="/Products/Add?id=@p.Id" class="list-group-item">Add to cart</a>
                     @if (User.IsInRole("Admin"))
                     {
-                        <a href="/Products/Delete?id=@p.Id" class="btn btn-danger">Delete</a>
+                        <a href="/Products/Delete?id=@p.Id" class="list-group-item text-danger">Delete</a>
                         @if (@p.Disable)
                         {
-                            <a href="/Products/Disable?id=@p.Id" class="btn btn-secondary">Enable</a>
+                            <a href="/Products/Disable?id=@p.Id" class="list-group-item text-secondary">Enable</a>
                         }
                         else
                         {
-                            <a href="/Products/Disable?id=@p.Id" class="btn btn-secondary">Disable</a>
+                            <a href="/Products/Disable?id=@p.Id" class="list-group-item text-warning">Disable</a>
                         }
 
                     }

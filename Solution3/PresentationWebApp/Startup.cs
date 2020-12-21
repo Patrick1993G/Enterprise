@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ShoppingCart.IOC;
+using System;
 
 namespace PresentationWebApp
 {
@@ -23,6 +24,16 @@ namespace PresentationWebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //session 
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            // end session
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -59,7 +70,9 @@ namespace PresentationWebApp
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            //session
+            app.UseSession();
+            //end session
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

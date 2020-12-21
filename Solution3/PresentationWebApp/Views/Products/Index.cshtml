@@ -6,16 +6,21 @@
 <h1>Products Catalogue</h1>
 <div class="container">
     <div class="row">
-        <div class="col-6">
-            @Html.Partial("SearchPartial")
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Filter Products
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item">  @Html.Partial("SearchPartial")</a>
+                <a class="dropdown-item">@Html.Partial("ViewFilterByCategoriesPartial", Model)</a>
+            </div>
         </div>
-        @Html.Partial("ViewFilterByCategoriesPartial",Model)
     </div>
 </div>
 @if (User.IsInRole("Admin"))
 {
     <p>
-        <a class="btn btn-primary" asp-action="Create">Create New Product</a>
+        <a class="btn btn-primary pt-2" asp-action="Create">Create New Product</a>
     </p>
 }
     <div class="container">

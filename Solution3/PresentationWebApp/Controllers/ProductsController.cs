@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ShoppingCart.Application.Interfaces;
 using ShoppingCart.Application.ViewModels;
 using ShoppingCart.Domain.Models;
@@ -13,10 +14,11 @@ namespace PresentationWebApp.Controllers
 {
     public class ProductsController : Controller
     {
-     
+        const string SessionKeyName = "_Basket";
         private readonly IProductsService _productsService;
         private readonly ICategoriesService _categoriesService;
         private IWebHostEnvironment _environment;
+        //private List<String> id = new List<String>();
         public ProductsController(IProductsService productsService,ICategoriesService categoryService, IWebHostEnvironment environment)
         {
             _productsService = productsService;
@@ -30,6 +32,8 @@ namespace PresentationWebApp.Controllers
         public IActionResult Index(int page =1, int pageSize = 4)
         {
             RefreshInfo();
+            var data = HttpContext.Session.GetString(SessionKeyName);
+           // var gatheredData = JsonConvert.DeserializeObject(String)(value); 
             var list = _productsService.GetProducts();
             int listCount = list.Count();
             IList<ProductViewModel> firstPage = GetPage(list, 0, 10);
@@ -37,8 +41,18 @@ namespace PresentationWebApp.Controllers
         }
         public IActionResult GetNextPage(int currentPage) {
             var list = _productsService.GetProducts();
-            IList<ProductViewModel> nextPage = GetPage(list,currentPage*10,10);
+            IList<ProductViewModel> nextPage = GetPage(list,currentPage+10,10);
             return View(nextPage);
+        }
+        public IActionResult Add(Guid id)
+        {
+            
+            HttpContext.Session.SetString(SessionKeyName, id.ToString());
+            
+            //get the product by id
+            //add the product to 
+            RefreshInfo();
+            return RedirectToAction("Index");
         }
         public IActionResult Filter(int id)
         {
@@ -50,6 +64,7 @@ namespace PresentationWebApp.Controllers
         [HttpPost]
         public IActionResult Search(string keyword)
         {
+            RefreshInfo();
             var list = _productsService.GetProducts(keyword).ToList();
             return View("Index", list);
         }
