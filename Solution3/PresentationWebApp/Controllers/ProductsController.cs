@@ -24,13 +24,25 @@ namespace PresentationWebApp.Controllers
             _categoriesService = categoryService;
             _environment = environment;
         }
+        IList<ProductViewModel> GetPage(IQueryable<ProductViewModel> list, int page, int pageSize)
+        {
+            return list.Skip(page * pageSize).Take(pageSize).ToList();
+        }
         public IActionResult Index()
         {
             var list = _productsService.GetProducts();
-            return View(list);
+            int listCount = list.Count();
+            IList<ProductViewModel> firstPage = GetPage(list, 0, 10);
+            return View(firstPage);
         }
-        public IActionResult Search(int category)
+        public IActionResult GetNextPage(int currentPage) {
+            var list = _productsService.GetProducts();
+            IList<ProductViewModel> nextPage = GetPage(list,currentPage*10,10);
+            return View(nextPage);
+        }
+        public IActionResult Filter(int category)
         {
+            RefreshInfo();
             var list = _productsService.GetProducts(category);
             return RedirectToAction("Index", list);
         }
@@ -71,6 +83,7 @@ namespace PresentationWebApp.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Disable(Guid id)
         {
+            var product = _productsService.GetProduct(id);
             try
             {
                 if (id == null)
@@ -79,13 +92,30 @@ namespace PresentationWebApp.Controllers
                 }
                 {
                     _productsService.DisableProduct(id);
-                    TempData["feedback"] = "Product was disabled successfully";
+                    if (!product.Disable)
+                    {
+                        TempData["feedback"] = "Product was disabled successfully";
+                    }
+                    else
+                    {
+                        TempData["feedback"] = "Product was anabled successfully";
+                    }
+                    
                 }
                
             }
             catch (Exception e)
             {
-                TempData["warning"] = "Product was not disabled !" + e.Message;
+                if (!product.Disable)
+                {
+                    TempData["warning"] = "Product was not disabled !" + e.Message;
+
+                }
+                else
+                {
+                    TempData["warning"] = "Product was not anabled !" + e.Message;
+
+                }
 
             }
             return RedirectToAction("Index");

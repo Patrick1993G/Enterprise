@@ -20,5 +20,6 @@ namespace ShoppingCart.Application.ViewModels
         public string ImageUrl { get; set; }
         [Required(ErrorMessage = "The stock size is required !")]
         public int Stock { get; set; }
+        public bool Disable { get; set; }
     }
 }

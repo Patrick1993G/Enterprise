@@ -31,7 +31,7 @@ namespace ShoppingCart.Data.Repositories
         public void DisableProduct(Guid id)
         {
             var p = GetProduct(id);
-            p.Disable = true;
+            p.Disable = !p.Disable;
             _context.SaveChanges();
         }
 
