@@ -1,0 +1,33 @@
+﻿@model IEnumerable<ShoppingCart.Application.ViewModels.OrderDetailsViewModel>
+
+@foreach (var o in Model)
+{
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="col-4">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body ">
+                    <h5 class="card-title">@o.Order.DatePlaced</h5>
+                    <p class="card-text"> @o.Order.UserEmail</p>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var m in Model)
+                        {
+                            if (m.Order.Id == o.Order.Id)
+                            {
+                                <li class="list-group-item">@m.Product.Name</li>
+                                <li class="list-group-item">€ @m.Product.Price</li>
+                            }
+
+                        }
+                    </ul>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="/Orders/Delete?id=@o.Id" class="list-group-item text-danger">Delete</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+}
+

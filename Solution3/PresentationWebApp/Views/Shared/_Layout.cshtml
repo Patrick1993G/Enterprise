@@ -35,7 +35,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Our Products</a>
                         </li>
                         @if (User.IsInRole("Admin"))
-                        {
+                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="OrderDetails" asp-action="Index">Orders</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
                             </li>

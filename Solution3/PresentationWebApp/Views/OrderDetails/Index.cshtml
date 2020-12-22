@@ -1,0 +1,18 @@
+﻿@model IEnumerable<ShoppingCart.Application.ViewModels.OrderDetailsViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <div class="row">
+        @if (this.Model.Count() > 0)
+        {
+            @Html.Partial("ViewOrdersPartial", Model)
+        }
+        else
+        {
+            <h1 class="display-4">There are no placed Orders!</h1>
+        }
+
+    </div>
+</div>
