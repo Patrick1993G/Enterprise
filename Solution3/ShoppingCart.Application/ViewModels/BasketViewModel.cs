@@ -8,7 +8,5 @@ namespace ShoppingCart.Application.ViewModels
     {
         List<ProductViewModel> products = new List<ProductViewModel>();
 
-
-
     }
 }

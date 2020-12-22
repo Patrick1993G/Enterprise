@@ -9,10 +9,10 @@ namespace ShoppingCart.Application.AutoMapper
         public DomainToViewModelProfile()
         {
             CreateMap<Product, ProductViewModel>(); //ForMember(x=> x.Name, opt=> opt.MapFrom(src=>src.Name));
-
             CreateMap<Category, CategoryViewModel>();
             CreateMap<Member, MemberViewModel>();
-            //CreateMap<Order, OrderViewModel>();
+            CreateMap<Order, OrderViewModel>();
+            CreateMap<OrderDetails,OrderViewModel>();
 
         }
 

@@ -18,7 +18,7 @@ namespace PresentationWebApp.Controllers
         private readonly IProductsService _productsService;
         private readonly ICategoriesService _categoriesService;
         private IWebHostEnvironment _environment;
-        //private List<String> id = new List<String>();
+     
         public ProductsController(IProductsService productsService,ICategoriesService categoryService, IWebHostEnvironment environment)
         {
             _productsService = productsService;
@@ -32,8 +32,7 @@ namespace PresentationWebApp.Controllers
         public IActionResult Index(int page =1, int pageSize = 4)
         {
             RefreshInfo();
-            var data = HttpContext.Session.GetString(SessionKeyName);
-           // var gatheredData = JsonConvert.DeserializeObject(String)(value); 
+          
             var list = _productsService.GetProducts();
             int listCount = list.Count();
             IList<ProductViewModel> firstPage = GetPage(list, 0, 10);
@@ -46,11 +45,18 @@ namespace PresentationWebApp.Controllers
         }
         public IActionResult Add(Guid id)
         {
-            
-            HttpContext.Session.SetString(SessionKeyName, id.ToString());
-            
-            //get the product by id
-            //add the product to 
+            List<String> idList = new List<String>();
+            string data = HttpContext.Session.GetString(SessionKeyName);
+            if (data != null)
+            {
+                idList.AddRange(data.Split(',').ToList());
+                idList.Add(id.ToString()+ ',');
+                HttpContext.Session.SetString(SessionKeyName, idList.ToString());
+            }
+            else
+            {
+                HttpContext.Session.SetString(SessionKeyName, id.ToString() + ",");
+            }
             RefreshInfo();
             return RedirectToAction("Index");
         }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ShoppingCart.Application.ViewModels
 {
-    class OrderViewModel
+    public class OrderViewModel
     {
         [Key]
         public Guid Id { get; set; }
