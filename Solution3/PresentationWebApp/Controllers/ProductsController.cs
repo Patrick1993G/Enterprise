@@ -29,19 +29,36 @@ namespace PresentationWebApp.Controllers
         {
             return list.Skip(page * pageSize).Take(pageSize).ToList();
         }
-        public IActionResult Index(int page =1, int pageSize = 4)
+        public IActionResult Index()
         {
             RefreshInfo();
-          
             var list = _productsService.GetProducts();
-            int listCount = list.Count();
             IList<ProductViewModel> firstPage = GetPage(list, 0, 10);
+            ViewBag.pageNo = 1;
             return View(firstPage);
         }
         public IActionResult GetNextPage(int currentPage) {
+            RefreshInfo();
+            if (currentPage <= Convert.ToInt32(ViewBag.pageNo))
+            {
+                ViewBag.pageNo = Convert.ToInt32(ViewBag.pageNo) + 1;
+            }
             var list = _productsService.GetProducts();
-            IList<ProductViewModel> nextPage = GetPage(list,currentPage+10,10);
-            return View(nextPage);
+            IList<ProductViewModel> nextPage = GetPage(list,currentPage,10);
+            
+            return View("Index", nextPage);
+        }
+        public IActionResult GetPreviousPage(int currentPage)
+        {
+            RefreshInfo();
+            if (currentPage != 0)
+            {
+                ViewBag.pageNo = Convert.ToInt32(ViewBag.pageNo) - 1;
+            }
+            var list = _productsService.GetProducts();
+            IList<ProductViewModel> previousPage = GetPage(list, currentPage, 10);
+            
+            return RedirectToAction("Index", previousPage);
         }
         public IActionResult Add(Guid id)
         {
