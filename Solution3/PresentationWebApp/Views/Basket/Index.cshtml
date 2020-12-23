@@ -1,0 +1,27 @@
+﻿@model IEnumerable<ShoppingCart.Application.ViewModels.ProductViewModel>
+
+<div class="container">
+    <div class="row">
+        @foreach (var p in Model)
+        {
+            @if ((!@p.Disable && !User.IsInRole("Admin")) || User.IsInRole("Admin"))
+            {
+                <div class="col-4">
+                    <div class="card" style="width: 18rem;">
+                        <img src="@p.ImageUrl" class="card-img-top image img-fluid" alt="...">
+                        <div class="card-body ">
+                            <h5 class="card-title">@p.Name</h5>
+                            <p class="card-text">€ @p.Price</p>
+                            <p class="card-text"></p>
+                            <a href="/Products/Details?id=@p.Id" class="list-group-item text-success">View Specifications</a>
+                            <a href="/Basket/Remove?id=@p.Id" class="list-group-item text-danger">Remove</a>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+    </div>
+
+    <a href="/Basket/checkout" class="list-group-item">Checkout</a>
+</div>

@@ -66,13 +66,23 @@ namespace PresentationWebApp.Controllers
             string data = HttpContext.Session.GetString(SessionKeyName);
             if (data != null)
             {
-                idList.AddRange(data.Split(',').ToList());
-                idList.Add(id.ToString()+ ',');
-                HttpContext.Session.SetString(SessionKeyName, idList.ToString());
+                idList.AddRange(data.Split('/').ToList());
+                idList.Add(id.ToString()+ ','+'/');
+                string toReturn ="";
+                foreach (var item in idList)
+                {
+                    if (!String.IsNullOrEmpty(item))
+                    {
+                        toReturn += item;
+                    }
+                   
+                }
+                toReturn = toReturn.Replace("/", string.Empty);
+                HttpContext.Session.SetString(SessionKeyName, toReturn);
             }
             else
             {
-                HttpContext.Session.SetString(SessionKeyName, id.ToString() + ",");
+                HttpContext.Session.SetString(SessionKeyName, id.ToString() + ","+"/");
             }
             RefreshInfo();
             return RedirectToAction("Index");
