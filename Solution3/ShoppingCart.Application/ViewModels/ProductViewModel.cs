@@ -21,5 +21,6 @@ namespace ShoppingCart.Application.ViewModels
         [Required(ErrorMessage = "The stock size is required !")]
         public int Stock { get; set; }
         public bool Disable { get; set; }
+        public int quantity { get; set; }
     }
 }

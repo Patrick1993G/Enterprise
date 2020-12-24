@@ -67,6 +67,7 @@ namespace PresentationWebApp.Controllers
             if (data != null)
             {
                 idList.AddRange(data.Split('/').ToList());
+               
                 idList.Add(id.ToString()+ ','+'/');
                 string toReturn ="";
                 foreach (var item in idList)
