@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ShoppingCart.Application.Interfaces;
 using ShoppingCart.Application.ViewModels;
 using System;
@@ -14,37 +15,67 @@ namespace PresentationWebApp.Controllers
         const string SessionKeyName = "_Basket";
 
         private readonly IProductsService _productsService;
-
         public BasketController(IProductsService productsService)
         {
-            _productsService = productsService;
+             _productsService = productsService;
         }
 
         public IActionResult Index()
         {
-            var list = HttpContext.Session.GetString(SessionKeyName);
-            var ids = list.Split(",");
-            var groupedIds = from id in ids
-                             group id by id into g
-                             let count = g.Count()
-                             orderby count ascending
-                             select new { value = g.Key, count = count };
-            List<ProductViewModel> products = new List<ProductViewModel>();
-
-            //search for duplicates
-            //IEnumerable<String> duplicateIds = idList.GroupBy(x => x)
-            //                        .Where(y => y.Count() > 1)
-            //                        .Select(x => x.Key);
-            foreach (var item in groupedIds)
+            List<ProductViewModel> products = GetProducts();
+            return View(products);
+        }
+        public IActionResult Remove(Guid id)
+        {
+            List<ProductViewModel> products = GetProducts();
+            var product = _productsService.GetProduct(id);
+            var productToAlter =products.FirstOrDefault(x => x.Id == product.Id);
+            productToAlter.Quantity--;
+            if (productToAlter.Quantity == 0)
             {
-                if (!String.IsNullOrEmpty(item.value))
+                products.Remove(productToAlter);
+            }
+            TempData["feedback"] = ("Product was removed successfully");
+            HttpContext.Session.SetString(SessionKeyName, ParseSessionListToString(products));
+            return View("Index", products);
+        }
+        private String ParseSessionListToString(List<ProductViewModel> products)
+        {
+            String toReturn = "";
+            foreach (var item in products)
+            {
+                if (products.Count() > 0)
                 {
-                    var product = _productsService.GetProduct(new Guid(item.value));
-                    product.quantity = item.count;
-                    products.Add(product);
+                    toReturn += JsonConvert.SerializeObject(item) + "/";
+                }
+
+            }
+            return toReturn;
+        }
+        private List<ProductViewModel> ParseSessionStringToList()
+        {
+            List<ProductViewModel> products = new List<ProductViewModel>();
+            string data = HttpContext.Session.GetString(SessionKeyName);
+            if (data != null)
+            {
+                List<String> stringList = data.Split('/').ToList();
+                foreach (var item in stringList)
+                {
+                    if (!String.IsNullOrEmpty(item))
+                    {
+                        products.Add(JsonConvert.DeserializeObject<ProductViewModel>(item));
+                    }
+
                 }
             }
-            return View(products);
+
+            return products;
+
+        }
+        private List<ProductViewModel> GetProducts()
+        {
+            var products = ParseSessionStringToList();
+            return products;
         }
     }
 }

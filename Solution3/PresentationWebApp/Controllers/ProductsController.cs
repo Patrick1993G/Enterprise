@@ -25,6 +25,8 @@ namespace PresentationWebApp.Controllers
             _categoriesService = categoryService;
             _environment = environment;
         }
+
+
         IList<ProductViewModel> GetPage(IQueryable<ProductViewModel> list, int page, int pageSize)
         {
             return list.Skip(page * pageSize).Take(pageSize).ToList();
@@ -60,39 +62,91 @@ namespace PresentationWebApp.Controllers
             
             return RedirectToAction("Index", previousPage);
         }
-        public IActionResult Add(Guid id)
+        private List<ProductViewModel> ParseSessionStringToList()
         {
-            List<String> idList = new List<String>();
+            List<ProductViewModel> products = new List<ProductViewModel>();
             string data = HttpContext.Session.GetString(SessionKeyName);
             if (data != null)
             {
-                idList.AddRange(data.Split('/').ToList());
-               
-                idList.Add(id.ToString()+ ','+'/');
-                string toReturn ="";
-                foreach (var item in idList)
+                List<String> stringList = data.Split('/').ToList();
+                foreach (var item in stringList)
                 {
                     if (!String.IsNullOrEmpty(item))
                     {
-                        toReturn += item;
+                        products.Add(JsonConvert.DeserializeObject<ProductViewModel>(item));
                     }
-                   
+
                 }
-                toReturn = toReturn.Replace("/", string.Empty);
-                HttpContext.Session.SetString(SessionKeyName, toReturn);
+            }
+
+            return products;
+
+        }
+        private String ParseSessionListToString(List<ProductViewModel> products)
+        {
+            String toReturn = "";
+            foreach (var item in products)
+            {
+                if (products.Count() >0)
+                {
+                    toReturn += JsonConvert.SerializeObject(item)+"/";
+                }
+
+            }
+            return toReturn;
+        }
+        public IActionResult Add(Guid id)
+        {
+            ProductViewModel toAdd = _productsService.GetProduct(id);
+            List <ProductViewModel> products = ParseSessionStringToList();
+            ProductViewModel toCheck = products.FirstOrDefault(x => x.Id == toAdd.Id);
+            if (toCheck != null)
+            {
+                toCheck.Quantity++;
+                TempData["feedback"] = ("Product was added again successfully");
             }
             else
             {
-                HttpContext.Session.SetString(SessionKeyName, id.ToString() + ","+"/");
+                products.Add(toAdd);
+                TempData["feedback"] = ("Product was added successfully");
             }
+            HttpContext.Session.SetString(SessionKeyName,ParseSessionListToString(products));
             RefreshInfo();
             return RedirectToAction("Index");
         }
+        //public IActionResult Add(Guid id)
+        //{
+        //    List<String> idList = new List<String>();
+        //    string data = HttpContext.Session.GetString(SessionKeyName);
+
+        //    if (data != null)
+        //    {
+        //        idList.AddRange(data.Split('/').ToList());
+               
+        //        idList.Add(id.ToString()+ ','+'/');
+        //        string toReturn ="";
+        //        foreach (var item in idList)
+        //        {
+        //            if (!String.IsNullOrEmpty(item))
+        //            {
+        //                toReturn += item;
+        //            }
+                   
+        //        }
+        //        toReturn = toReturn.Replace("/", string.Empty);
+        //        HttpContext.Session.SetString(SessionKeyName, toReturn);
+        //    }
+        //    else
+        //    {
+        //        HttpContext.Session.SetString(SessionKeyName, id.ToString() + ","+"/");
+        //    }
+        //    RefreshInfo();
+        //    return RedirectToAction("Index");
+        //}
         public IActionResult Filter(int id)
         {
             RefreshInfo();
             var list = _productsService.GetProducts(id);
-            // return RedirectToAction("Index", list);
             return View("Index", list);
         }
         [HttpPost]

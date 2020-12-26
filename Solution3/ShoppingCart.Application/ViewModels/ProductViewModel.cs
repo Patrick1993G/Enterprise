@@ -19,8 +19,9 @@ namespace ShoppingCart.Application.ViewModels
         public CategoryViewModel Category { get; set; }
         public string ImageUrl { get; set; }
         [Required(ErrorMessage = "The stock size is required !")]
+        [Range(typeof(int),"0","9999",ErrorMessage ="stock Size must be not negative!")]
         public int Stock { get; set; }
         public bool Disable { get; set; }
-        public int quantity { get; set; }
+        public int Quantity { get; set; } = 1;
     }
 }
