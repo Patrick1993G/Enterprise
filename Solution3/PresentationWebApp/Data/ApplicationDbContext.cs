@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ShoppingCart.Application.ViewModels;
 
 namespace PresentationWebApp.Data
 {
@@ -12,5 +13,6 @@ namespace PresentationWebApp.Data
             : base(options)
         {
         }
+        public DbSet<ShoppingCart.Application.ViewModels.ProductViewModel> ProductViewModel { get; set; }
     }
 }

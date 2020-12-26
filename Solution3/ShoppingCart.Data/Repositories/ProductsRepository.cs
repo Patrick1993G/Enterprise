@@ -23,6 +23,14 @@ namespace ShoppingCart.Data.Repositories
             return p.Id;
         }
 
+        public int DecreaseStock(Guid id)
+        {
+            var p = GetProduct(id);
+            p.Stock--;
+            _context.SaveChanges();
+            return p.Stock;
+        }
+
         public void DeleteProduct(Product p)
         {
             _context.Products.Remove(p);

@@ -6,6 +6,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\Images\NewFolder\**" />
+    <Content Remove="wwwroot\Images\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\Images\NewFolder\**" />
+    <None Remove="wwwroot\Images\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\qrcodejs\.gitignore" />
+    <None Include="wwwroot\lib\qrcodejs\index.svg" />
+    <None Include="wwwroot\lib\qrcodejs\jquery.min.js" />
+    <None Include="wwwroot\lib\qrcodejs\LICENSE" />
+    <None Include="wwwroot\lib\qrcodejs\qrcode.js" />
+    <None Include="wwwroot\lib\qrcodejs\qrcode.min.js" />
+    <None Include="wwwroot\lib\qrcodejs\README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.10" />
@@ -28,10 +46,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ShoppingCart.Application\ShoppingCart.Application.csproj" />
     <ProjectReference Include="..\ShoppingCart.IOC\ShoppingCart.IOC.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\Images\NewFolder\" />
   </ItemGroup>
 
 </Project>

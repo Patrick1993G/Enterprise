@@ -42,6 +42,11 @@ namespace PresentationWebApp
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            //services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+            //{
+            //    microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+            //    microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+            //});
 
             services.AddControllersWithViews();
             services.AddRazorPages();

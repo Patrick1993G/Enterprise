@@ -1,27 +1,27 @@
 ﻿@model IEnumerable<ShoppingCart.Application.ViewModels.ProductViewModel>
-
+@{
+    ViewData["Title"] = "Cart";
+}
+@if (this.Model.Count() > 0)
+{
 <div class="container">
     <div class="row">
-        @foreach (var p in Model)
-        {
-            @if ((!@p.Disable && !User.IsInRole("Admin")) || User.IsInRole("Admin"))
-            {
-                <div class="col-4">
-                    <div class="card" style="width: 18rem;">
-                        <img src="@p.ImageUrl" class="card-img-top image img-fluid" alt="...">
-                        <div class="card-body ">
-                            <h5 class="card-title">@p.Name</h5>
-                            <p class="card-text">€ @p.Price</p>
-                            <p class="card-text">Qty: @p.Quantity</p>
-                            <a href="/Products/Details?id=@p.Id" class="list-group-item text-success">View Specifications</a>
-                            <a href="/Basket/Remove?id=@p.Id" class="list-group-item text-danger">Remove</a>
-                        </div>
-                    </div>
-                </div>
-            }
-
-        }
+        @Html.Partial("ViewProductsPartial", Model)
     </div>
-
-    <a href="/Basket/checkout" class="list-group-item">Checkout</a>
+    @if (User.IsInRole("Admin") || User.IsInRole("User"))
+    {
+        <a href="/Basket/Checkout" class="list-group-item">Checkout</a>}
+    else
+    {
+        <h2 class="lead">you must be logged in to checkout the items !</h2>
+    }
 </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <h1>You have nothing in the cart!</h1>
+        </div>
+    </div>
+}

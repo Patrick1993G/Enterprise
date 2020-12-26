@@ -9,9 +9,19 @@
                 <img src="@p.ImageUrl" class="card-img-top image img-fluid" alt="...">
                 <div class="card-body ">
                     <h5 class="card-title">@p.Name</h5>
+                    @if (ViewData["Title"] == "Cart")
+                    {
+                        <p class="card-text">Qty: @p.Quantity</p>}
                     <p class="card-text">€ @p.Price</p>
                     <a href="/Products/Details?id=@p.Id" class="list-group-item text-success">View Specifications</a>
-                    <a href="/Products/Add?id=@p.Id" class="list-group-item">Add to cart</a>
+                    @if (p.Stock > 0)
+                    {
+                        <a href="/Products/Add?id=@p.Id" class="list-group-item">Add to cart</a>
+                    }
+                    else
+                    {
+                        <h5 class="card-title text-danger">Sorry this product is out of stock!</h5>
+                    }
                     @if (User.IsInRole("Admin"))
                     {
                         <a href="/Products/Delete?id=@p.Id" class="list-group-item text-danger">Delete</a>
@@ -24,6 +34,10 @@
                             <a href="/Products/Disable?id=@p.Id" class="list-group-item text-warning">Disable</a>
                         }
 
+                    }
+                    @if (ViewData["Title"] == "Cart")
+                    {
+                        <a href="/Basket/Remove?id=@p.Id" class="list-group-item text-danger">Remove</a>
                     }
                 </div>
             </div>
