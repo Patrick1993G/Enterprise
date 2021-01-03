@@ -10,7 +10,7 @@
     </div>
     @if (User.IsInRole("Admin") || User.IsInRole("User"))
     {
-        <a href="/Basket/Checkout" class="list-group-item">Checkout</a>}
+        <a href="/Basket/Checkout" class="btn btn-primary">Checkout</a>}
     else
     {
         <h2 class="lead">you must be logged in to checkout the items !</h2>

@@ -11,7 +11,7 @@
                     <h5 class="card-title">@p.Name</h5>
                     @if (ViewData["Title"] == "Cart")
                     {
-                        <p class="card-text">Qty: @p.Quantity</p>}
+                    <p class="card-text">Qty: @p.Quantity</p>}
                     <p class="card-text">€ @p.Price</p>
                     <a href="/Products/Details?id=@p.Id" class="list-group-item text-success">View Specifications</a>
                     @if (p.Stock > 0)

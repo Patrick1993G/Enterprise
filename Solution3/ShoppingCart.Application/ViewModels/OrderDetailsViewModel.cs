@@ -11,11 +11,7 @@ namespace ShoppingCart.Application.ViewModels
         [Key]
         public int Id { get; set; }
         [Required]
-        public Guid ProductFk { get; set; }
-        [Required]
         public virtual Product Product { get; set; }
-        [Required]
-        public Guid OrderFK { get; set; }
         [Required]
         public virtual Order Order { get; set; }
         [Required]

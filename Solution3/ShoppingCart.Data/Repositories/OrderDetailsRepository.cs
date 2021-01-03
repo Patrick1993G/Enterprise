@@ -20,6 +20,10 @@ namespace ShoppingCart.Data.Repositories
 
         public int AddOrderDetails(OrderDetails o)
         {
+            o.OrderFK = o.Order.Id;
+            o.ProductFk = o.Product.Id;
+            o.Order = null;
+            o.Product = null;
             _context.OrderDetails.Add(o);
             _context.SaveChanges();
             return o.Id;

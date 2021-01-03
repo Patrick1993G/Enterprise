@@ -21,9 +21,12 @@ namespace ShoppingCart.Application.Services
             _ordersRepository = ordersRepository;
         }
 
-        public void AddOrder(OrderViewModel order)
+        public Guid AddOrder(OrderViewModel order)
         {
             _ordersRepository.AddOrder(_mapper.Map<Order>(order));
+            var orders = GetOrders().OrderByDescending(x => x.DatePlaced);
+            var list = orders.ToList();
+            return list.ElementAt(0).Id;
         }
 
         public Guid DeleteOrder(Guid id)

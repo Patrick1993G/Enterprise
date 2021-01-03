@@ -10,7 +10,7 @@ namespace ShoppingCart.Application.Interfaces
     {
         IQueryable<OrderViewModel> GetOrders();
         OrderViewModel GetOrder(Guid id);
-        void AddOrder(OrderViewModel Order);
+        Guid AddOrder(OrderViewModel Order);
         Guid DeleteOrder(Guid id);
     }
 }

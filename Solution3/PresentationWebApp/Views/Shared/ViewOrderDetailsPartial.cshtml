@@ -7,22 +7,22 @@
         <div class="col-4">
             <div class="card" style="width: 18rem;">
                 <div class="card-body ">
-                    <h5 class="card-title">@o.Order.DatePlaced</h5>
-                    <p class="card-text"> @o.Order.UserEmail</p>
+                    <h5 class="card-title">Date Placed : @o.Order.DatePlaced</h5>
+                    <p class="card-text"> User Email : @o.Order.UserEmail</p>
                     <ul class="list-group list-group-flush">
                         @foreach (var m in Model)
                         {
                             if (m.Order.Id == o.Order.Id)
                             {
-                                <li class="list-group-item">@m.Product.Name</li>
-                                <li class="list-group-item">€ @m.Product.Price</li>
+                                <li class="list-group-item">Product : @m.Product.Name</li>
+                                <li class="list-group-item">Price : € @m.Product.Price</li>
                             }
 
                         }
                     </ul>
                     @if (User.IsInRole("Admin"))
                     {
-                        <a href="/Orders/Delete?id=@o.Id" class="list-group-item text-danger">Delete</a>
+                        <a href="/OrderDetails/Delete?id=@o.Order.Id" class="list-group-item text-danger">Delete</a>
                     }
                 </div>
             </div>

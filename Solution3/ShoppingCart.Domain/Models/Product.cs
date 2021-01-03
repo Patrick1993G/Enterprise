@@ -21,8 +21,6 @@ namespace ShoppingCart.Domain.Models
         [Required]
         public virtual Category Category { get; set; }
         
-        [ForeignKey("Category")]
-        public int CategoryId { get; set; }
         public string ImageUrl { get; set; }
 
         public int Stock { get; set; }

@@ -31,7 +31,12 @@ namespace PresentationWebApp.Controllers
             var list = _orderDetailsService.GetOrderDetails();
             return View(list);
         }
-
+        public  IActionResult Delete(Guid id)
+        {
+            _ordersService.DeleteOrder(id);
+            TempData["feedback"] = ("Order was removed successfully");
+            return RedirectToAction("Index");
+        }
         
     }
 }

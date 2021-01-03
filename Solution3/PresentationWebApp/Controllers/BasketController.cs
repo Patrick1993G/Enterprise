@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShoppingCart.Application.Interfaces;
@@ -14,15 +15,16 @@ namespace PresentationWebApp.Controllers
     public class BasketController : Controller
     {
         const string SessionKeyName = "_Basket";
-
+        private readonly IMapper _mapper;
         private readonly IProductsService _productsService;
         private readonly IOrdersService _ordersService;
         private readonly IOrderDetailsService _orderDetailsService;
-        public BasketController(IProductsService productsService,IOrderDetailsService orderDetailsService, IOrdersService ordersService)
+        public BasketController(IProductsService productsService,IOrderDetailsService orderDetailsService, IOrdersService ordersService, IMapper mapper)
         {
             _productsService = productsService;
             _orderDetailsService = orderDetailsService;
             _ordersService = ordersService;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -85,44 +87,39 @@ namespace PresentationWebApp.Controllers
         public IActionResult Checkout()
         {
             List<ProductViewModel> products = GetProducts();
+            double total = 0;
+            foreach (var item in products)
+            {
+                total += (item.Price*item.Quantity);
+            }
+            ViewBag.Total = total.ToString();
             return View("Checkout", products);
         }
         public IActionResult Pay()
         {
             List<ProductViewModel> products = GetProducts();
-            bool pay = false;
             DateTime datePlaced = DateTime.Now;
             string email = User.Identity.Name;
             //create order 
             OrderViewModel order = new OrderViewModel();
             order.DatePlaced = datePlaced;
             order.UserEmail = email;
-            _ordersService.AddOrder(order);
-            //decrease the stock
+            order.Id = _ordersService.AddOrder(order);
             foreach (var item in products)
-            {
+            {    //decrease the stock
                 _productsService.DecreaseStock(item.Id);
-            }
-            //create order details
-            List<OrderDetailsViewModel> orderDetailsViewModelList = new List<OrderDetailsViewModel>();
-            foreach (var item in products)
-            {
                 OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel();
-                //orderDetailsViewModel.Order=_ma;
+                orderDetailsViewModel.Order = _mapper.Map<Order>(order);
+                orderDetailsViewModel.Product = _mapper.Map<Product>(item);
+                orderDetailsViewModel.Price = item.Price;
+                orderDetailsViewModel.Quantity = item.Quantity;
+                _orderDetailsService.AddOrderDetails(orderDetailsViewModel);
+               
+            }
+             HttpContext.Session.SetString(SessionKeyName, "");
+            TempData["feedback"] = ("Payment was successful");
 
-                //orderDetailsViewModel.Add()
-            }
-            if (pay)
-            {
-                TempData["feedback"] = ("Payment was successfully");
-
-            }
-            else
-            {
-                TempData["warning"] = ("Payment was not successful");
-            }
-            products = null;
-            return View("Index", products);
+            return RedirectToAction("Index");
         }
     }
 }

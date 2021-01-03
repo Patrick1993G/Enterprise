@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20201130092600_disableAndStockProductMigration.cs" />
     <Compile Remove="Migrations\20201130092600_disableAndStockProductMigration.Designer.cs" />
+    <Compile Remove="Migrations\20210103200222_UpdatingOrderDetailsTable.cs" />
+    <Compile Remove="Migrations\20210103200222_UpdatingOrderDetailsTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

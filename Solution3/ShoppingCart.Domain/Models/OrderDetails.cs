@@ -11,13 +11,11 @@ namespace ShoppingCart.Domain.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [Required]
+        [ForeignKey("Product")]
         public Guid ProductFk { get; set; }
-        [Required]
         public virtual Product Product { get; set; }
-        [Required]
+        [ForeignKey("Order")]
         public Guid OrderFK { get; set; }
-        [Required]
         public virtual Order Order { get; set; }
         [Required]
         public int Quantity { get; set; }

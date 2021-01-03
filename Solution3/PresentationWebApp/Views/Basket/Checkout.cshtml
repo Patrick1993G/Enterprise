@@ -27,7 +27,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Quantity)
                 </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -48,8 +47,16 @@
                     </td>
                 </tr>
             }
+        <tr>
+            <th>
+                Total : 
+            </th>
+            <th>
+                @ViewBag.Total
+            </th>
+        </tr>
         </tbody>
     </table>
-    <input type="submit" href="/Basket/Pay" class="btn btn-primary" />
+    <a href="/Basket/Pay" class="btn btn-primary" >Pay</a>
 </body>
 </html>
