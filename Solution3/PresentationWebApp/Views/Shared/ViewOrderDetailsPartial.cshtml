@@ -2,6 +2,7 @@
 
 @foreach (var o in Model)
 {
+    
     @if (User.IsInRole("Admin"))
     {
         <div class="col-4">
@@ -16,8 +17,8 @@
                             {
                                 <li class="list-group-item">Product : @m.Product.Name</li>
                                 <li class="list-group-item">Price : € @m.Product.Price</li>
+                                <li class="list-group-item">Quantity : @m.Quantity</li>
                             }
-
                         }
                     </ul>
                     @if (User.IsInRole("Admin"))
@@ -27,7 +28,7 @@
                 </div>
             </div>
         </div>
-    }
 
-}
+        }
+    }
 

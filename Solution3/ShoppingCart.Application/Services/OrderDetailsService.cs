@@ -46,5 +46,6 @@ namespace ShoppingCart.Application.Services
             var myModel = _mapper.Map<OrderDetailsViewModel>(myOrder);
             return myModel;
         }
+
     }
 }

@@ -110,6 +110,8 @@ namespace PresentationWebApp.Controllers
                 products.Add(toAdd);
                 TempData["feedback"] = ("Product was added successfully");
             }
+            //decrease the stock
+            _productsService.DecreaseStock(id);
             HttpContext.Session.SetString(SessionKeyName,ParseSessionListToString(products));
             RefreshInfo();
             return RedirectToAction("Index");
@@ -269,7 +271,7 @@ namespace PresentationWebApp.Controllers
         private void RefreshInfo()
         {
             //fetch a list of categories
-            var listOfCategories = _categoriesService.GetCategories();
+            var listOfCategories = _categoriesService.GetCategories().Where(x => x.Disable == false);
             //pass to the view
             ViewBag.Categories = listOfCategories;
         }

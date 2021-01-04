@@ -84,5 +84,14 @@ namespace ShoppingCart.Application.Services
             }
             return stock;
         }
+        public int IncreaseStock(Guid id)
+        {
+            int stock = 0;
+            if (id != null)
+            {
+                stock = _productsRepo.IncreaseStock(id);
+            }
+            return stock;
+        }
     }
 }

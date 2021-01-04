@@ -1,47 +1,55 @@
 ﻿@model IEnumerable<ShoppingCart.Application.ViewModels.ProductViewModel>
 
-@foreach (var p in Model)
+@if (this.Model.Count() == 0)
 {
-    @if ((!@p.Disable && !User.IsInRole("Admin")) || User.IsInRole("Admin"))
+    <h2 class="lead">No Products were found !</h2>
+}
+else
+{
+    @foreach (var p in Model)
     {
-        <div class="col-4">
-            <div class="card" style="width: 18rem;">
-                <img src="@p.ImageUrl" class="card-img-top image img-fluid" alt="...">
-                <div class="card-body ">
-                    <h5 class="card-title">@p.Name</h5>
-                    @if (ViewData["Title"] == "Cart")
-                    {
-                    <p class="card-text">Qty: @p.Quantity</p>}
-                    <p class="card-text">€ @p.Price</p>
-                    <a href="/Products/Details?id=@p.Id" class="list-group-item text-success">View Specifications</a>
-                    @if (p.Stock > 0)
-                    {
-                        <a href="/Products/Add?id=@p.Id" class="list-group-item">Add to cart</a>
-                    }
-                    else
-                    {
-                        <h5 class="card-title text-danger">Sorry this product is out of stock!</h5>
-                    }
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a href="/Products/Delete?id=@p.Id" class="list-group-item text-danger">Delete</a>
-                        @if (@p.Disable)
+        @if ((!@p.Disable && !User.IsInRole("Admin")) && !@p.Category.Disable || User.IsInRole("Admin"))
+        {
+            <div class="col-4">
+                <div class="card" style="width: 18rem;">
+                    <img src="@p.ImageUrl" class="card-img-top image img-fluid" alt="...">
+                    <div class="card-body ">
+                        <h5 class="card-title">@p.Name</h5>
+                        @if (ViewData["Title"] == "Cart")
                         {
-                            <a href="/Products/Disable?id=@p.Id" class="list-group-item text-secondary">Enable</a>
+                            <p class="card-text">Qty: @p.Quantity</p>
+                        }
+                        <p class="card-text">€ @p.Price</p>
+                        <a href="/Products/Details?id=@p.Id" class="list-group-item text-success">View Specifications</a>
+                        @if (User.IsInRole("Admin") && ViewData["Title"] != "Cart")
+                        {
+                            <a href="/Products/Delete?id=@p.Id" class="list-group-item text-danger">Delete</a>
+
+                            @if (@p.Disable)
+                            {
+                                <a href="/Products/Disable?id=@p.Id" class="list-group-item text-secondary">Enable</a>
+                            }
+                            else
+                            {
+                                <a href="/Products/Disable?id=@p.Id" class="list-group-item text-warning">Disable</a>
+                            }
+
+                        }
+                        @if (ViewData["Title"] == "Cart")
+                        {
+                            <a href="/Basket/Remove?id=@p.Id" class="list-group-item text-danger">Remove</a>
+                        }
+                        @if (p.Stock > 0)
+                        {
+                            <a href="/Products/Add?id=@p.Id" class="list-group-item">Add to cart</a>
                         }
                         else
                         {
-                            <a href="/Products/Disable?id=@p.Id" class="list-group-item text-warning">Disable</a>
+                            <h5 class="card-title text-danger">Sorry this product is out of stock!</h5>
                         }
-
-                    }
-                    @if (ViewData["Title"] == "Cart")
-                    {
-                        <a href="/Basket/Remove?id=@p.Id" class="list-group-item text-danger">Remove</a>
-                    }
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     }
-
 }

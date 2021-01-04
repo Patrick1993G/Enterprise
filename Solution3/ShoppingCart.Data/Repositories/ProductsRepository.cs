@@ -30,7 +30,13 @@ namespace ShoppingCart.Data.Repositories
             _context.SaveChanges();
             return p.Stock;
         }
-
+        public int IncreaseStock(Guid id)
+        {
+            var p = GetProduct(id);
+            p.Stock++;
+            _context.SaveChanges();
+            return p.Stock;
+        }
         public void DeleteProduct(Product p)
         {
             _context.Products.Remove(p);

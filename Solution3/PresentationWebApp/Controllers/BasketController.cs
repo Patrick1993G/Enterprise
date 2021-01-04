@@ -37,6 +37,8 @@ namespace PresentationWebApp.Controllers
             List<ProductViewModel> products = GetProducts();
             var product = _productsService.GetProduct(id);
             var productToAlter = products.FirstOrDefault(x => x.Id == product.Id);
+            //increase the stock
+            _productsService.IncreaseStock(id);
             productToAlter.Quantity--;
             if (productToAlter.Quantity == 0)
             {
@@ -106,15 +108,13 @@ namespace PresentationWebApp.Controllers
             order.UserEmail = email;
             order.Id = _ordersService.AddOrder(order);
             foreach (var item in products)
-            {    //decrease the stock
-                _productsService.DecreaseStock(item.Id);
+            {    
                 OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel();
                 orderDetailsViewModel.Order = _mapper.Map<Order>(order);
                 orderDetailsViewModel.Product = _mapper.Map<Product>(item);
                 orderDetailsViewModel.Price = item.Price;
                 orderDetailsViewModel.Quantity = item.Quantity;
                 _orderDetailsService.AddOrderDetails(orderDetailsViewModel);
-               
             }
              HttpContext.Session.SetString(SessionKeyName, "");
             TempData["feedback"] = ("Payment was successful");
