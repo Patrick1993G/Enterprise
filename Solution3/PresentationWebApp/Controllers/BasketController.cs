@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ShoppingCart.Application.Interfaces;
 using ShoppingCart.Application.ViewModels;
@@ -19,16 +20,26 @@ namespace PresentationWebApp.Controllers
         private readonly IProductsService _productsService;
         private readonly IOrdersService _ordersService;
         private readonly IOrderDetailsService _orderDetailsService;
-        public BasketController(IProductsService productsService,IOrderDetailsService orderDetailsService, IOrdersService ordersService, IMapper mapper)
+        private readonly ILogger<BasketController> _logger;
+        public BasketController(IProductsService productsService, ILogger<BasketController> logger,IOrderDetailsService orderDetailsService, IOrdersService ordersService, IMapper mapper)
         {
             _productsService = productsService;
             _orderDetailsService = orderDetailsService;
             _ordersService = ordersService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public IActionResult Index()
         {
+            try
+            {
+                _logger.LogInformation("returning view");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error occurred " + e.Message);
+            }
             List<ProductViewModel> products = GetProducts();
             return View(products);
         }
@@ -40,12 +51,21 @@ namespace PresentationWebApp.Controllers
             //increase the stock
             _productsService.IncreaseStock(id);
             productToAlter.Quantity--;
-            if (productToAlter.Quantity == 0)
+            try
+            {
+                if (productToAlter.Quantity == 0)
             {
                 products.Remove(productToAlter);
             }
             TempData["feedback"] = ("Product was removed successfully");
             HttpContext.Session.SetString(SessionKeyName, ParseSessionListToString(products));
+            
+                _logger.LogInformation("removing item from basket");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error occurred " + e.Message);
+            }
             return View("Index", products);
         }
         private String ParseSessionListToString(List<ProductViewModel> products)
@@ -99,6 +119,7 @@ namespace PresentationWebApp.Controllers
         }
         public IActionResult Pay()
         {
+            try { 
             List<ProductViewModel> products = GetProducts();
             DateTime datePlaced = DateTime.Now;
             string email = User.Identity.Name;
@@ -118,7 +139,12 @@ namespace PresentationWebApp.Controllers
             }
              HttpContext.Session.SetString(SessionKeyName, "");
             TempData["feedback"] = ("Payment was successful");
-
+             _logger.LogInformation("User payed successfully"); 
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error occurred " + e.Message);
+            }
             return RedirectToAction("Index");
         }
     }

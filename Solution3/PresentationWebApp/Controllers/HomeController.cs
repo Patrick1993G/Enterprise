@@ -20,7 +20,15 @@ namespace PresentationWebApp.Controllers
 
         public IActionResult Index()
         {
-            //......
+            try
+            {
+                _logger.LogInformation("returning view");
+            }
+            catch(Exception e)
+            {
+                _logger.LogError("Error occurred "+e.Message);
+            }
+          
             return View();
         }
 
