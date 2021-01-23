@@ -43,7 +43,6 @@ namespace PresentationWebApp.Controllers
                 {
                     _productsService.IncreaseStock(item.Product.Id);
                 }
-
             }
             return true;
         }

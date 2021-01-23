@@ -39,6 +39,8 @@ namespace PresentationWebApp.Controllers
             catch (Exception e)
             {
                 _logger.LogError("Error occurred " + e.Message);
+                TempData["error"] = ("Error occured Oooopppsss! We will look into it!");
+                return RedirectToAction("Error", "Home");
             }
             List<ProductViewModel> products = GetProducts();
             return View(products);
@@ -65,6 +67,8 @@ namespace PresentationWebApp.Controllers
             catch (Exception e)
             {
                 _logger.LogError("Error occurred " + e.Message);
+                TempData["error"] = ("Error occured while removing product from cart! We will look into it!");
+                return RedirectToAction("Error", "Home");
             }
             return View("Index", products);
         }
@@ -143,7 +147,9 @@ namespace PresentationWebApp.Controllers
             }
             catch (Exception e)
             {
+                TempData["error"] = ("Error occured while paying! We will look into it!");
                 _logger.LogError("Error occurred " + e.Message);
+                return RedirectToAction("Error", "Home");
             }
             return RedirectToAction("Index");
         }

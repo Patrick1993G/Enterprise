@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ShoppingCart.Application.Interfaces;
 using ShoppingCart.Application.ViewModels;
@@ -18,12 +19,13 @@ namespace PresentationWebApp.Controllers
         private readonly IProductsService _productsService;
         private readonly ICategoriesService _categoriesService;
         private IWebHostEnvironment _environment;
-     
-        public ProductsController(IProductsService productsService,ICategoriesService categoryService, IWebHostEnvironment environment)
+        private readonly ILogger<BasketController> _logger;
+        public ProductsController(IProductsService productsService,ILogger<BasketController> logger,ICategoriesService categoryService, IWebHostEnvironment environment)
         {
             _productsService = productsService;
             _categoriesService = categoryService;
             _environment = environment;
+            _logger = logger;
         }
 
 
@@ -152,8 +154,10 @@ namespace PresentationWebApp.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError("Error occurred " + e.Message);
+                TempData["error"] = ("Error occured Oooopppsss! We will look into it!");
                 TempData["warning"] = "Product was not deleted !" + e.Message;
-
+                return RedirectToAction("Error", "Home");
             }
             return RedirectToAction("Index");
         }
@@ -193,7 +197,9 @@ namespace PresentationWebApp.Controllers
                     TempData["warning"] = "Product was not enabled !" + e.Message;
 
                 }
-
+                _logger.LogError("Error occurred " + e.Message);
+                TempData["error"] = ("Error occured Oooopppsss! We will look into it!");
+                return RedirectToAction("Error", "Home");
             }
             return RedirectToAction("Index");
         }
@@ -232,7 +238,9 @@ namespace PresentationWebApp.Controllers
             catch (Exception e)
             {
                 TempData["warning"] = "Product was not added !"+e.Message;
-
+                _logger.LogError("Error occurred " + e.Message);
+                TempData["error"] = ("Error occured Oooopppsss! We will look into it!");
+                return RedirectToAction("Error", "Home");
             }
             RefreshInfo();
             return View(data);
