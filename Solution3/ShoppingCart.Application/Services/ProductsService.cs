@@ -26,7 +26,7 @@ namespace ShoppingCart.Application.Services
         public void AddProduct(ProductViewModel myProduct)
         {
             var product = _mapper.Map<Product>(myProduct);
-            product.Category = null;
+           // product.Category = null;
             _productsRepo.AddProduct(product);
             
         }
